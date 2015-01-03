@@ -75,12 +75,25 @@ if exists(select * from sys.objects where name = 'GetSystemUserNameFromString' a
 	drop function dbo.GetSystemUserNameFromString
 go
 
+if exists(select * from sys.objects where name = 'Digits' and type = 'FT')	
+	drop function dbo.Digits
+go
+
 if exists(select * from sys.assemblies where name = 'SqlToolset')
 	drop assembly SqlToolset
 go
 
 create assembly SqlToolset from 'd:\GitHub\SqlToolset\bin\Debug\Skra.Sql.SqlToolset.dll'
 with PERMISSION_SET = safe
+go
+
+create function Digits(@value bigint, @base smallint)
+returns table 
+(
+			[value] bigint,
+			[multiplier] bigint
+)
+external name [SqlToolset].[Skra.Sql.SqlToolset.MathFunctions].Digits
 go
 
 create aggregate Concatenate(@value nvarchar(4000))
@@ -233,3 +246,9 @@ go
 select 'DataCompression', dbo.DataCompression(0x010100000000000512000000, 1)
 go
 
+select * from dbo.Digits(123456789, 10)
+select * from dbo.Digits(123456789, 8)
+select * from dbo.Digits(0, 8)
+
+select * from dbo.Digits(16, 16)
+Go

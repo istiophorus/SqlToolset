@@ -55,5 +55,52 @@ namespace Skra.Sql.SqlToolset
 
             return MaxCommonDividor(b, temp);
 		}
+
+		private const Int32 MinBaseValue = 2;
+
+		[SqlFunction(DataAccess = DataAccessKind.None, FillRowMethodName = "FillRowDigits", IsDeterministic = true, IsPrecise = true, TableDefinition = @"digit bigint, multiplier bigint")]
+		public static IEnumerable Digits(SqlInt64 value, SqlInt16 baseValue)
+		{
+			if (value.IsNull || baseValue.IsNull)
+			{
+				yield break;
+			}
+
+			Int64 numValue = value.Value;
+
+			Int16 numBaseValue = baseValue.Value;
+
+			if (numBaseValue < MinBaseValue)
+			{
+				throw new ArgumentOutOfRangeException("Base value cannot be lower than " + MinBaseValue);
+			}
+
+			Int64 currentMultiplier = 1;
+
+			if (numValue != 0)
+			{
+				while (numValue != 0)
+				{
+					yield return new Pair<Int64, Int64>(numValue % numBaseValue, currentMultiplier);
+
+					currentMultiplier *= numBaseValue;
+
+					numValue /= numBaseValue;
+				}
+			}
+			else
+			{
+				yield return new Pair<Int64, Int64>(0, 1);
+			}
+		}
+
+		private static void FillRowDigits(Object obj, out SqlInt64 value, out SqlInt64 multiplier)
+		{
+			Pair<Int64, Int64> tempValue = (Pair<Int64, Int64>)obj;
+
+			value = new SqlInt64(tempValue.A);
+
+			multiplier = new SqlInt64(tempValue.B);
+		}
 	}
 }
