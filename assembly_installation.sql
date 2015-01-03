@@ -1,7 +1,4 @@
 
--- alter database SqlToolsetHost set trustworthy on 
-
-
 exec sp_configure 'Show Advanced Options', 1
 reconfigure
 go
@@ -9,8 +6,6 @@ go
 exec sp_configure 'CLR Enable', 1
 reconfigure
 go
-
--- create assembly SqlToolset from 'd:\sqlprojects\SqlToolset\bin\Debug\Skra.Sql.SqlToolset.dll'
 
 if exists(select * from sys.types where name = 'MacAddressType')
 	drop type dbo.MacAddressType
@@ -180,11 +175,6 @@ as
 external name [SqlToolset].[Skra.Sql.SqlToolset.MiscelaneusTools].GetSystemUserNameFromString
 go
 
-create function dbo.RollingSum(@id uniqueidentifier, @value decimal(38, 4))
-returns decimal(38, 4)
-external name [SqlToolset].[Skra.Sql.SqlToolset.MathFunctions].RollingSum
-go
-
 declare @w [dbo].MacAddressType
 set @w = 'AABBCCFF9932'
 select cast(@w as varchar)
@@ -242,11 +232,4 @@ go
 
 select 'DataCompression', dbo.DataCompression(0x010100000000000512000000, 1)
 go
-
-
-
-
-
-
-
 
