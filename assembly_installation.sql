@@ -72,22 +72,6 @@ if exists(select * from sys.objects where name = 'CreateRandomIntSeries' and typ
 	drop function dbo.CreateRandomIntSeries
 go
 
-if exists(select * from sys.objects where name = 'MovingAverage' and type = 'FS')	
-	drop function dbo.MovingAverage
-go
-
-if exists(select * from sys.objects where name = 'RollingSum' and type = 'FS')	
-	drop function dbo.RollingSum
-go
-
-if exists(select * from sys.objects where name = 'EMA' and type = 'FS')	
-	drop function dbo.EMA
-go
-
-if exists(select * from sys.objects where name = 'ClearCache')	
-	drop procedure dbo.ClearCache
-go
-
 if exists(select * from sys.objects where name = 'GetSystemUserNameFromBinary' and type = 'FS')	
 	drop function dbo.GetSystemUserNameFromBinary
 go
@@ -95,15 +79,6 @@ go
 if exists(select * from sys.objects where name = 'GetSystemUserNameFromString' and type = 'FS')	
 	drop function dbo.GetSystemUserNameFromString
 go
-
-if exists(select * from sys.objects where name = 'PreviousValue' and type = 'FS')	
-	drop function dbo.PreviousValue
-go
-
-if exists(select * from sys.objects where name = 'ValueBack' and type = 'FS')	
-	drop function dbo.ValueBack
-go
-
 
 if exists(select * from sys.assemblies where name = 'SqlToolset')
 	drop assembly SqlToolset
@@ -193,17 +168,6 @@ returns table ([n] int, [value] bigint)
 external name [SqlToolset].[Skra.Sql.SqlToolset.Series].CreateRandomIntSeries
 go
 
-create function dbo.MovingAverage(@id uniqueidentifier, @length int, @value decimal(38, 4))
-returns decimal(38, 4)
-external name [SqlToolset].[Skra.Sql.SqlToolset.MathFunctions].MovingAverage
-go
-
-create procedure dbo.ClearCache
-@id uniqueidentifier
-as
-external name [SqlToolset].[Skra.Sql.SqlToolset.MathFunctions].ClearCache
-go
-
 create function dbo.GetSystemUserNameFromBinary(@sid varbinary(max), @nullOnError bit)
 returns sysname
 as
@@ -219,21 +183,6 @@ go
 create function dbo.RollingSum(@id uniqueidentifier, @value decimal(38, 4))
 returns decimal(38, 4)
 external name [SqlToolset].[Skra.Sql.SqlToolset.MathFunctions].RollingSum
-go
-
-create function dbo.EMA(@id uniqueidentifier, @length int, @value decimal(38, 4))
-returns decimal(38, 4)
-external name [SqlToolset].[Skra.Sql.SqlToolset.MathFunctions].EMA
-go
-
-create function dbo.PreviousValue(@id uniqueidentifier, @value sql_variant)
-returns sql_variant
-external name [SqlToolset].[Skra.Sql.SqlToolset.MathFunctions].PreviousValue
-go
-
-create function dbo.ValueBack(@id uniqueidentifier, @length int, @value sql_variant)
-returns sql_variant
-external name [SqlToolset].[Skra.Sql.SqlToolset.MathFunctions].ValueBack
 go
 
 declare @w [dbo].MacAddressType
@@ -293,6 +242,7 @@ go
 
 select 'DataCompression', dbo.DataCompression(0x010100000000000512000000, 1)
 go
+
 
 
 
