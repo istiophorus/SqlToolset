@@ -70,6 +70,25 @@ namespace Skra.Sql.SqlToolset
 		}
 
 		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
+		public static SqlBytes CalculateDataHash(SqlBytes data, SqlString hashName)
+		{
+			if (data.IsNull)
+			{
+				return SqlBytes.Null;
+			}
+
+			if (hashName.IsNull)
+			{
+				return SqlBytes.Null;
+			}
+
+			HashAlgorithm hash = HashAlgorithm.Create(hashName.Value);
+
+			return new SqlBytes(hash.ComputeHash(data.Value));
+		}
+
+
+		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
 		public static SqlBytes CalculateDataMD5(SqlBytes data)
 		{
 			if (data.IsNull)

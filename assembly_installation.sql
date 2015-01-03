@@ -24,12 +24,12 @@ if exists(select * from sys.objects where name = 'MatchesPattern' and type = 'FS
 	drop function dbo.MatchesPattern
 go
 
-if exists(select * from sys.objects where name = 'CalculateFileMD5' and type = 'FS')	
-	drop function dbo.CalculateFileMD5
-go
-
 if exists(select * from sys.objects where name = 'CalculateDataMD5' and type = 'FS')	
 	drop function dbo.CalculateDataMD5
+go
+
+if exists(select * from sys.objects where name = 'CalculateDataHash' and type = 'FS')	
+	drop function dbo.CalculateDataHash
 go
 
 if exists(select * from sys.objects where name = 'CalculateDataSHA' and type = 'FS')	
@@ -54,6 +54,10 @@ go
 
 if exists(select * from sys.objects where name = 'BasicPivot' and type = 'PC')	
 	drop procedure dbo.BasicPivot
+go
+
+if exists(select * from sys.objects where name = 'CalculateDataHash' and type = 'PC')	
+	drop procedure dbo.CalculateDataHash
 go
 
 if exists(select * from sys.objects where name = 'MaxCommonDividor' and type = 'FS')	
@@ -105,7 +109,7 @@ if exists(select * from sys.assemblies where name = 'SqlToolset')
 	drop assembly SqlToolset
 go
 
-create assembly SqlToolset from 'd:\SqlToolset\bin\Debug\Skra.Sql.SqlToolset.dll'
+create assembly SqlToolset from 'd:\GitHub\SqlToolset\bin\Debug\Skra.Sql.SqlToolset.dll'
 with PERMISSION_SET = safe
 go
 
@@ -128,6 +132,12 @@ create function CalculateDataMD5(@data varbinary(max))
 returns varbinary(max)
 with RETURNS NULL ON NULL INPUT
 external name [SqlToolset].[Skra.Sql.SqlToolset.BlobOperations].CalculateDataMD5
+go
+
+create function CalculateDataHash(@data varbinary(max), @hashName NVARCHAR(32))
+returns varbinary(max)
+with RETURNS NULL ON NULL INPUT
+external name [SqlToolset].[Skra.Sql.SqlToolset.BlobOperations].CalculateDataHash
 go
 
 create function CalculateDataSHA(@data varbinary(max))
@@ -236,17 +246,23 @@ set @w2 = NULL
 select cast(@w2 as varchar)
 go
 
-select dbo.DataCompression(dbo.DataCompression(0x1234567890, 1), 0)
-select dbo.DataCompression(null, 0)
+select 'DataCompression', dbo.DataCompression(dbo.DataCompression(0x1234567890, 1), 0)
+select 'DataCompression', dbo.DataCompression(null, 0)
 go
 
-select dbo.CalculateDataMD5(cast(N'aaaa' as varbinary(max)))
-select dbo.CalculateDataMD5(null)
+select 'CalculateDataMD5', dbo.CalculateDataMD5(cast(N'aaaa' as varbinary(max)))
+select 'CalculateDataMD5', dbo.CalculateDataMD5(null)
 go
 
-select dbo.CalculateDataSHA(cast(N'aaaa' as varbinary(max)))
-select dbo.CalculateDataSHA(dbo.CalculateDataMD5(cast(N'aaaa' as varbinary(max))))
-select dbo.CalculateDataSHA(null)
+select 'CalculateDataSHA', dbo.CalculateDataSHA(cast(N'aaaa' as varbinary(max)))
+select 'CalculateDataSHA', dbo.CalculateDataSHA(dbo.CalculateDataMD5(cast(N'aaaa' as varbinary(max))))
+select 'CalculateDataSHA', dbo.CalculateDataSHA(null)
+go
+
+select 'CalculateDataHash', dbo.CalculateDataHash(NULL, NULL)
+select 'CalculateDataHash', dbo.CalculateDataHash(cast(N'aaaa' as varbinary(max)), NULL)
+select 'CalculateDataHash', dbo.CalculateDataHash(cast(N'aaaa' as varbinary(max)), 'SHA512')
+select 'CalculateDataHash', dbo.CalculateDataHash(cast(N'aaaa' as varbinary(max)), 'MD5')
 go
 
 select cast(value as int) from dbo.Split('1,2,3,4,5,6,7,8,9', ',')
@@ -271,69 +287,16 @@ go
 select * from dbo.CreateRandomIntSeries(10, 100);
 go
 
-select dbo.GetSystemUserNameFromBinary(0x010100000000000512000000, 1);
-select dbo.GetSystemUserNameFromBinary(0x0, 1);
+select 'GetSystemUserNameFromBinary', dbo.GetSystemUserNameFromBinary(0x010100000000000512000000, 1);
+select 'GetSystemUserNameFromBinary', dbo.GetSystemUserNameFromBinary(0x0, 1);
 go
 
-select dbo.DataCompression(0x010100000000000512000000, 1)
+select 'DataCompression', dbo.DataCompression(0x010100000000000512000000, 1)
 go
 
 
 
-/*
-declare @id uniqueidentifier
-
-set @id = NEWID()
-
-select n, value, dbo.MovingAverage(@id, 20, value) from dbo.CreateSeries(1, 0, 1, 255)
-
-exec dbo.ClearCache @id
-*/
-
---- select dbo.GetSystemUserNameFromBinary(sid) from sys.syslogins
-
---- select dbo.GetSystemUserNameFromString(N'S-1-5-18')
-
-/*
-declare @id uniqueidentifier
-
-set @id = NEWID()
-
-select n, value, dbo.RollingSum(@id, value) from dbo.CreateSeries(1, 0, 1, 255)
-
-exec dbo.ClearCache @i
-*/
-
-/*
-declare @id uniqueidentifier
-
-set @id = NEWID()
-
-select n, value, dbo.EMA(@id, 5, value) from dbo.CreateSeries(1, 0, 1, 555)
-
-exec dbo.ClearCache @id
-*/
-
-/*
-declare @id uniqueidentifier
-
-set @id = NEWID()
-
-select n, value, dbo.PreviousValue(@id, value) from dbo.CreateSeries(1, 0, 1, 555)
-
-exec dbo.ClearCache @id
-*/
-
---declare @id uniqueidentifier
-
---set @id = NEWID()
-
---select n, value, dbo.ValueBack(@id, 10, value) from dbo.CreateSeries(1, 0, 1, 555)
-
---exec dbo.ClearCache @id
 
 
-
-select * from sys.syslogins
 
 
