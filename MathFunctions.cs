@@ -5,7 +5,6 @@ using Microsoft.SqlServer.Server;
 using System.Data.SqlTypes;
 using System.Collections;
 using System.Data.SqlClient;
-using Skra.Sql.SqlToolset.Aggregations;
 
 namespace Skra.Sql.SqlToolset
 {

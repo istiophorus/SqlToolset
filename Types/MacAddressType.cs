@@ -102,12 +102,7 @@ namespace Skra.Sql.SqlToolset.Types
 			return _toString;
 		}
 
-		static MacAddressType()
-		{
-			_null = new MacAddressType(null);
-		}
-
-		private static readonly MacAddressType _null;
+		private static readonly MacAddressType _null = new MacAddressType(null);
 
 		public static MacAddressType Null
 		{
