@@ -19,6 +19,10 @@ if exists(select * from sys.objects where name = 'MatchesPattern' and type = 'FS
 	drop function dbo.MatchesPattern
 go
 
+if exists(select * from sys.objects where name = 'LevenshteinDistance' and type = 'FS')	
+	drop function dbo.LevenshteinDistance
+go
+
 if exists(select * from sys.objects where name = 'CalculateDataMD5' and type = 'FS')	
 	drop function dbo.CalculateDataMD5
 go
@@ -104,6 +108,11 @@ go
 create function MatchesPattern(@pattern nvarchar(4000), @value nvarchar(4000))
 returns integer
 external name [SqlToolset].[Skra.Sql.SqlToolset.StringOperations].[MatchesPattern]
+go
+
+create function LevenshteinDistance(@pattern nvarchar(4000), @value nvarchar(4000))
+returns integer
+external name [SqlToolset].[Skra.Sql.SqlToolset.StringOperations].[LevenshteinDistance]
 go
 
 create function DaysInMonths(@year int)
@@ -252,3 +261,12 @@ select * from dbo.Digits(0, 8)
 
 select * from dbo.Digits(16, 16)
 Go
+
+
+select dbo.LevenshteinDistance(N'abcdefgh', N'abcdefg')
+select dbo.LevenshteinDistance(N'bcdefgh', N'abcdefg')
+select dbo.LevenshteinDistance(NULL, N'abcdefg')
+select dbo.LevenshteinDistance(N'bcdefgh', NULL)
+select dbo.LevenshteinDistance(N'bcdefgh', NULL)
+select dbo.LevenshteinDistance(N'tron', N'trop')
+go

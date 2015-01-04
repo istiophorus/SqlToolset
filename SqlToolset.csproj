@@ -68,6 +68,7 @@
     <Compile Include="Aggregations\IAggregation.cs" />
     <Compile Include="DateTimeOperations.cs" />
     <Compile Include="InternalTools.cs" />
+    <Compile Include="LevenshteinDistance.cs" />
     <Compile Include="MersenneTwister.cs" />
     <Compile Include="Series.cs" />
     <Compile Include="Types\MacAddressType.cs" />

@@ -28,6 +28,22 @@ namespace Skra.Sql.SqlToolset
 			return m.Success ? CommonDefinitions.ResultTrue : CommonDefinitions.ResultFalse;
 		}
 
+		[SqlFunction(DataAccess = DataAccessKind.None)]
+		public static SqlInt32 LevenshteinDistance(SqlString textA, SqlString textB)
+		{
+			if (textA.IsNull)
+			{
+				return SqlInt32.Null;
+			}
+
+			if (textB.IsNull)
+			{
+				return SqlInt32.Null;
+			}
+
+			return Skra.Sql.SqlToolset.LevenshteinDistance.Compute(textA.Value, textB.Value);
+		}
+
 		private const Char DefaultSeparator = ',';
 
 		[SqlFunction(DataAccess = DataAccessKind.None, FillRowMethodName = "FillRowSplitToInts", IsDeterministic = true, IsPrecise = true, TableDefinition = @"value bigint")]
