@@ -5,6 +5,7 @@ using System.Data.SqlTypes;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.SqlServer.Server;
+using System.Linq;
 
 namespace Skra.Sql.SqlToolset
 {
@@ -113,6 +114,37 @@ namespace Skra.Sql.SqlToolset
 			{
 				singleValue = SqlInt64.Null;
 			}
+		}
+
+		[SqlFunction(DataAccess = DataAccessKind.None, FillRowMethodName = "FillRowCalculateCharacters", IsDeterministic = true, IsPrecise = true, TableDefinition = @"value nchar(1), count int")]
+		public static IEnumerable CalculateCharacters(SqlString value)
+		{
+			if (value.IsNull)
+			{
+				return null;
+			}
+
+			Dictionary<Char, Int32> counters = new Dictionary<Char, Int32>();
+
+			Char[] chars = value.Value.ToCharArray();
+
+			return
+				from ch in chars
+				group ch by ch into grp
+				select new Pair<Char, Int32>
+					(
+						grp.Key,
+						grp.Count()
+					);
+		}
+
+		private static void FillRowCalculateCharacters(Object obj, out SqlString character, out SqlInt32 count)
+		{
+			Pair<Char, Int32> tempValue = (Pair<Char, Int32>)obj;
+
+			character = new SqlString(new String(tempValue.A, 1));
+
+			count = tempValue.B;
 		}
 	}
 }

@@ -55,6 +55,10 @@ if exists(select * from sys.objects where name = 'SplitToInts' and type = 'FT')
 	drop function dbo.SplitToInts
 go
 
+if exists(select * from sys.objects where name = 'CalculateCharacters' and type = 'FT')	
+	drop function dbo.CalculateCharacters
+go
+
 if exists(select * from sys.objects where name = 'BasicPivot' and type = 'PC')	
 	drop procedure dbo.BasicPivot
 go
@@ -168,6 +172,15 @@ returns table
 			[value] bigint
 )
 external name [SqlToolset].[Skra.Sql.SqlToolset.StringOperations].SplitToInts
+go
+
+create function CalculateCharacters(@input nvarchar(max))
+returns table 
+(
+			[character] NCHAR(1),
+			[count] INT
+)
+external name [SqlToolset].[Skra.Sql.SqlToolset.StringOperations].CalculateCharacters
 go
 
 create type [dbo].MacAddressType
@@ -286,3 +299,11 @@ select dbo.HexBufferToString(0x01234) as hex
 select dbo.HexBufferToString(0x) as hex
 select dbo.HexBufferToString(NULL) as hex
 go
+
+select * from dbo.CalculateCharacters('abcdefgh')
+select * from dbo.CalculateCharacters('abbcccddddeeeeeffffff')
+select * from dbo.CalculateCharacters(N'aa¹¹¹¥¥¥')
+select * from dbo.CalculateCharacters(N'')
+select * from dbo.CalculateCharacters(NULL)
+go
+
