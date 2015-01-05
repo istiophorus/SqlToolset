@@ -16,6 +16,10 @@ if exists(select * from sys.objects where name = 'Concatenate' and type = 'AF')
 	drop aggregate Concatenate
 go
 
+if exists(select * from sys.objects where name = 'HarmonicMean' and type = 'AF')
+	drop aggregate HarmonicMean
+go
+
 if exists(select * from sys.objects where name = 'MatchesPattern' and type = 'FS')	
 	drop function dbo.MatchesPattern
 go
@@ -133,6 +137,12 @@ create aggregate Concatenate(@value nvarchar(4000))
 returns nvarchar(4000)
 external name [SqlToolset].[SqlToolset.Concatenate]
 go
+
+create aggregate HarmonicMean(@value float(53))
+returns float(53)
+external name [SqlToolset].[SqlToolset.Aggregations.HarmonicMean]
+go
+
 
 create function MatchesPattern(@pattern nvarchar(4000), @value nvarchar(4000))
 returns integer
@@ -383,4 +393,29 @@ select dbo.CharAt('abcdefghij', -1)
 select dbo.CharAt('abcdefghij', NULL)
 select dbo.CharAt(NULL, 1)
 select dbo.CharAt('', 0)
+GO
+
+select dbo.HarmonicMean(num)
+from
+(
+select 2 as num union all select 2 union all select 5 union all select 7
+) as inn
+
+select dbo.HarmonicMean(num)
+from
+(
+select 2 AS num
+) as inn
+
+select dbo.HarmonicMean(num)
+from
+(
+select NULL AS num
+) as inn
+
+select dbo.HarmonicMean(num)
+from
+(
+select 2 as num union all select 2
+) as inn
 GO
