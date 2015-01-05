@@ -1,3 +1,4 @@
+set nocount on
 
 exec sp_configure 'Show Advanced Options', 1
 reconfigure
@@ -23,16 +24,20 @@ if exists(select * from sys.objects where name = 'MinDT2' and type = 'FS')
 	drop function dbo.MinDT2
 go
 
+if exists(select * from sys.objects where name = 'CharAt' and type = 'FS')	
+	drop function dbo.CharAt
+go
+
 if exists(select * from sys.objects where name = 'MaxDT2' and type = 'FS')	
 	drop function dbo.MaxDT2
 go
 
 if exists(select * from sys.objects where name = 'MinDT3' and type = 'FS')	
-	drop function dbo.MinDT2
+	drop function dbo.MinDT3
 go
 
 if exists(select * from sys.objects where name = 'MaxDT3' and type = 'FS')	
-	drop function dbo.MaxDT2
+	drop function dbo.MaxDT3
 go
 
 if exists(select * from sys.objects where name = 'LevenshteinDistance' and type = 'FS')	
@@ -137,6 +142,11 @@ go
 create function MinDT2(@a datetime, @b datetime)
 returns datetime
 external name [SqlToolset].[Skra.Sql.SqlToolset.DateTimeOperations].MinDT2
+go
+
+create function CharAt(@a NVARCHAR(max), @index int)
+returns NCHAR(1)
+external name [SqlToolset].[Skra.Sql.SqlToolset.StringOperations].CharAt
 go
 
 create function MaxDT2(@a datetime, @b datetime)
@@ -358,3 +368,19 @@ select dbo.MaxDT3('2011-01-01 12:04:12', '2010-01-02 11:04:12', '2013-01-02 11:0
 select dbo.MaxDT3('2010-01-01 12:04:12', '2012-01-02 11:04:12', '2013-01-02 11:04:12')
 select dbo.MaxDT3('2011-01-01 12:04:12', '2013-01-02 11:04:12', '2010-01-02 11:04:12')
 go
+
+select dbo.CharAt('abcdefghij', 0)
+select dbo.CharAt('abcdefghij', 1)
+select dbo.CharAt('abcdefghij', 2)
+select dbo.CharAt('abcdefghij', 3)
+select dbo.CharAt('abcdefghij', 4)
+select dbo.CharAt('abcdefghij', 5)
+select dbo.CharAt('abcdefghij', 6)
+
+
+select dbo.CharAt('abcdefghij', 100)
+select dbo.CharAt('abcdefghij', -1)
+select dbo.CharAt('abcdefghij', NULL)
+select dbo.CharAt(NULL, 1)
+select dbo.CharAt('', 0)
+GO

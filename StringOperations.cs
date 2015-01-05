@@ -12,6 +12,31 @@ namespace Skra.Sql.SqlToolset
 	public sealed class StringOperations
 	{
 		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
+		public static SqlString CharAt(SqlString input, SqlInt32 index)
+		{
+			if (input.IsNull)
+			{
+				return SqlString.Null;
+			}
+
+			if (index.IsNull)
+			{
+				return SqlString.Null;
+			}
+
+			Int32 indexValue = index.Value;
+
+			String text = input.Value;
+
+			if (indexValue < 0 || indexValue >= text.Length)
+			{
+				return SqlString.Null;
+			}
+
+			return new SqlString(new String(text[indexValue], 1));
+		}
+
+		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
 		public static SqlInt32 MatchesPattern(SqlString pattern, SqlString value)
 		{
 			if (pattern.IsNull)
