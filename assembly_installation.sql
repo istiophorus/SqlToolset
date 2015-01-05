@@ -19,6 +19,22 @@ if exists(select * from sys.objects where name = 'MatchesPattern' and type = 'FS
 	drop function dbo.MatchesPattern
 go
 
+if exists(select * from sys.objects where name = 'MinDT2' and type = 'FS')	
+	drop function dbo.MinDT2
+go
+
+if exists(select * from sys.objects where name = 'MaxDT2' and type = 'FS')	
+	drop function dbo.MaxDT2
+go
+
+if exists(select * from sys.objects where name = 'MinDT3' and type = 'FS')	
+	drop function dbo.MinDT2
+go
+
+if exists(select * from sys.objects where name = 'MaxDT3' and type = 'FS')	
+	drop function dbo.MaxDT2
+go
+
 if exists(select * from sys.objects where name = 'LevenshteinDistance' and type = 'FS')	
 	drop function dbo.LevenshteinDistance
 go
@@ -116,6 +132,26 @@ go
 create function MatchesPattern(@pattern nvarchar(4000), @value nvarchar(4000))
 returns integer
 external name [SqlToolset].[Skra.Sql.SqlToolset.StringOperations].[MatchesPattern]
+go
+
+create function MinDT2(@a datetime, @b datetime)
+returns datetime
+external name [SqlToolset].[Skra.Sql.SqlToolset.DateTimeOperations].MinDT2
+go
+
+create function MaxDT2(@a datetime, @b datetime)
+returns datetime
+external name [SqlToolset].[Skra.Sql.SqlToolset.DateTimeOperations].MaxDT2
+go
+
+create function MinDT3(@a datetime, @b datetime, @c datetime)
+returns datetime
+external name [SqlToolset].[Skra.Sql.SqlToolset.DateTimeOperations].MinDT3
+go
+
+create function MaxDT3(@a datetime, @b datetime, @c datetime)
+returns datetime
+external name [SqlToolset].[Skra.Sql.SqlToolset.DateTimeOperations].MaxDT3
 go
 
 create function LevenshteinDistance(@pattern nvarchar(4000), @value nvarchar(4000))
@@ -307,3 +343,18 @@ select * from dbo.CalculateCharacters(N'')
 select * from dbo.CalculateCharacters(NULL)
 go
 
+select dbo.MinDT2('2014-01-01 12:04:12', '2014-01-02 11:04:12')
+select dbo.MinDT2('2014-01-01 12:04:12', NULL)
+
+select dbo.MaxDT2('2014-01-01 12:04:12', '2014-01-02 11:04:12')
+select dbo.MaxDT2('2014-01-01 12:04:12', NULL)
+go
+
+select dbo.MinDT3('2011-01-01 12:04:12', '2010-01-02 11:04:12', '2013-01-02 11:04:12')
+select dbo.MinDT3('2010-01-01 12:04:12', '2012-01-02 11:04:12', '2013-01-02 11:04:12')
+select dbo.MinDT3('2011-01-01 12:04:12', '2012-01-02 11:04:12', '2010-01-02 11:04:12')
+
+select dbo.MaxDT3('2011-01-01 12:04:12', '2010-01-02 11:04:12', '2013-01-02 11:04:12')
+select dbo.MaxDT3('2010-01-01 12:04:12', '2012-01-02 11:04:12', '2013-01-02 11:04:12')
+select dbo.MaxDT3('2011-01-01 12:04:12', '2013-01-02 11:04:12', '2010-01-02 11:04:12')
+go

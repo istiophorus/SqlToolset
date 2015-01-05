@@ -9,6 +9,30 @@ namespace Skra.Sql.SqlToolset
 {
 	public sealed class DateTimeOperations
 	{
+		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
+		public static SqlDateTime MinDT3(SqlDateTime inputA, SqlDateTime inputB, SqlDateTime inputC)
+		{
+			return InternalTools.GetMinValue3(inputA, inputB, inputC, SqlDateTime.Null);
+		}
+
+		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
+		public static SqlDateTime MaxDT3(SqlDateTime inputA, SqlDateTime inputB, SqlDateTime inputC)
+		{
+			return InternalTools.GetMaxValue3(inputA, inputB, inputC, SqlDateTime.Null);
+		}
+
+		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
+		public static SqlDateTime MinDT2(SqlDateTime inputA, SqlDateTime inputB)
+		{
+			return InternalTools.GetMinValue(inputA, inputB, SqlDateTime.Null);
+		}
+
+		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
+		public static SqlDateTime MaxDT2(SqlDateTime inputA, SqlDateTime inputB)
+		{
+			return InternalTools.GetMaxValue(inputA, inputB, SqlDateTime.Null);
+		}
+
 		#region Days in month table valued function
 
 		private struct MonthInfo

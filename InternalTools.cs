@@ -5,6 +5,7 @@ using System.Security.Principal;
 using System.IO;
 using System.Security.AccessControl;
 using System.Runtime.InteropServices;
+using System.Data.SqlTypes;
 
 namespace Skra.Sql.SqlToolset
 {
@@ -50,6 +51,128 @@ namespace Skra.Sql.SqlToolset
 
 				sb.Length = 0;
 			}
+		}
+
+		internal static T GetMinValue<T>(T a, T b, T nullObject) where T : INullable, IComparable
+		{
+			if (a.IsNull)
+			{
+				return nullObject;
+			}
+
+			if (b.IsNull)
+			{
+				return nullObject;
+			}
+
+			if (a.CompareTo(b) <= 0)
+			{
+				return a;
+			}
+
+			return b;
+		}
+
+		internal static T GetMaxValue3<T>(T a, T b, T c, T nullObject) where T : INullable, IComparable
+		{
+			if (a.IsNull)
+			{
+				return nullObject;
+			}
+
+			if (b.IsNull)
+			{
+				return nullObject;
+			}
+
+			if (c.IsNull)
+			{
+				return nullObject;
+			}
+
+			if (a.CompareTo(b) >= 0) //// a >= b
+			{
+				if (a.CompareTo(c) >= 0) //// a >= b && a >= c
+				{
+					return a;
+				}
+				else //// c > a && a >= b
+				{
+					return c;
+				}
+			}
+			else //// b > a
+			{
+				if (b.CompareTo(c) >= 0) //// b > a && b >= c
+				{
+					return b;
+				}
+				else //// c > b && b > a
+				{
+					return c;
+				}
+			}
+		}
+
+		internal static T GetMinValue3<T>(T a, T b, T c, T nullObject) where T : INullable, IComparable
+		{
+			if (a.IsNull)
+			{
+				return nullObject;
+			}
+
+			if (b.IsNull)
+			{
+				return nullObject;
+			}
+
+			if (c.IsNull)
+			{
+				return nullObject;
+			}
+
+			if (a.CompareTo(b) <= 0) //// a <= b
+			{
+				if (a.CompareTo(c) <= 0) //// a <= b && a <= c
+				{
+					return a;
+				}
+				else //// c < a && a <= b
+				{
+					return c;
+				}
+			}
+			else //// b < a
+			{
+				if (b.CompareTo(c) <= 0) //// b < a && b <= c
+				{
+					return b;
+				}
+				else //// c < b && b < a
+				{
+					return c;
+				}
+			}
+		}
+
+		internal static T GetMaxValue<T>(T a, T b, T nullObject) where T : INullable, IComparable
+		{
+			if (a.IsNull)
+			{
+				return nullObject;
+			}
+
+			if (b.IsNull)
+			{
+				return nullObject;
+			}
+
+			if (a.CompareTo(b) >= 0)
+			{
+				return a;
+			}
+
+			return b;
 		}
 
 		private static readonly Char[][] BytesConverter2;

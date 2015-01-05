@@ -11,7 +11,7 @@ namespace Skra.Sql.SqlToolset
 {
 	public sealed class StringOperations
 	{
-		[SqlFunction(DataAccess = DataAccessKind.None)]
+		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
 		public static SqlInt32 MatchesPattern(SqlString pattern, SqlString value)
 		{
 			if (pattern.IsNull)
@@ -29,7 +29,7 @@ namespace Skra.Sql.SqlToolset
 			return m.Success ? CommonDefinitions.ResultTrue : CommonDefinitions.ResultFalse;
 		}
 
-		[SqlFunction(DataAccess = DataAccessKind.None)]
+		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
 		public static SqlInt32 LevenshteinDistance(SqlString textA, SqlString textB)
 		{
 			if (textA.IsNull)
