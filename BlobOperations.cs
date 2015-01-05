@@ -70,6 +70,23 @@ namespace Skra.Sql.SqlToolset
 		}
 
 		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
+		public static SqlString HexBufferToString(SqlBytes blob)
+		{
+			if (null == blob)
+			{
+				return SqlString.Null;
+			}
+
+			if (blob.IsNull)
+			{
+				return SqlString.Null;
+			}
+
+			return InternalTools.HexBufferToString(blob.Value);
+		}
+
+
+		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
 		public static SqlBytes CalculateDataHash(SqlBytes data, SqlString hashName)
 		{
 			if (data.IsNull)

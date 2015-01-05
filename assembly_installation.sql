@@ -39,6 +39,10 @@ if exists(select * from sys.objects where name = 'DataCompression' and type = 'F
 	drop function dbo.DataCompression
 go
 
+if exists(select * from sys.objects where name = 'HexBufferToString' and type = 'FS')	
+	drop function dbo.HexBufferToString
+go
+
 if exists(select * from sys.objects where name = 'DaysInMonths' and type = 'FT')	
 	drop function dbo.DaysInMonths
 go
@@ -142,6 +146,12 @@ create function DataCompression(@blob varbinary(max), @decompress bit)
 returns varbinary(max)
 with RETURNS NULL ON NULL INPUT
 external name [SqlToolset].[Skra.Sql.SqlToolset.BlobOperations].DataCompression
+go
+
+create function HexBufferToString(@blob varbinary(max))
+returns nvarchar(max)
+with RETURNS NULL ON NULL INPUT
+external name [SqlToolset].[Skra.Sql.SqlToolset.BlobOperations].HexBufferToString
 go
 
 create function Split(@input nvarchar(max), @separators nvarchar(max))
@@ -269,4 +279,10 @@ select dbo.LevenshteinDistance(NULL, N'abcdefg')
 select dbo.LevenshteinDistance(N'bcdefgh', NULL)
 select dbo.LevenshteinDistance(N'bcdefgh', NULL)
 select dbo.LevenshteinDistance(N'tron', N'trop')
+go
+
+select dbo.HexBufferToString(0x1234) as hex
+select dbo.HexBufferToString(0x01234) as hex
+select dbo.HexBufferToString(0x) as hex
+select dbo.HexBufferToString(NULL) as hex
 go
