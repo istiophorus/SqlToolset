@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.SqlServer.Server;
 
-namespace Skra.Sql.SqlToolset
+namespace SqlToolset
 {
 	public sealed class BlobOperations
 	{

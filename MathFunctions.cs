@@ -6,7 +6,7 @@ using System.Data.SqlTypes;
 using System.Collections;
 using System.Data.SqlClient;
 
-namespace Skra.Sql.SqlToolset
+namespace SqlToolset
 {
     public class MathFunctions
 	{

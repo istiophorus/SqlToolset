@@ -17,7 +17,7 @@ using System.Security.Cryptography;
 using System.IO.Compression;
 using System.Security.Principal;
 
-namespace Skra.Sql.SqlToolset
+namespace SqlToolset
 {
 	public class MiscelaneusTools
 	{

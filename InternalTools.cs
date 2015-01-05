@@ -7,7 +7,7 @@ using System.Security.AccessControl;
 using System.Runtime.InteropServices;
 using System.Data.SqlTypes;
 
-namespace Skra.Sql.SqlToolset
+namespace SqlToolset
 {
 	internal static class InternalTools
 	{

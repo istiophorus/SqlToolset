@@ -5,7 +5,7 @@ using System.Data.SqlTypes;
 using System.Text;
 using Microsoft.SqlServer.Server;
 
-namespace Skra.Sql.SqlToolset
+namespace SqlToolset
 {
 	public sealed class DateTimeOperations
 	{

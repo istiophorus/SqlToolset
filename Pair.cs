@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Skra.Sql.SqlToolset
+namespace SqlToolset
 {
 	internal sealed class Pair<T, V>
 	{

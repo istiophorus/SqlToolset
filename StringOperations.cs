@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using Microsoft.SqlServer.Server;
 using System.Linq;
 
-namespace Skra.Sql.SqlToolset
+namespace SqlToolset
 {
 	public sealed class StringOperations
 	{
@@ -67,7 +67,7 @@ namespace Skra.Sql.SqlToolset
 				return SqlInt32.Null;
 			}
 
-			return Skra.Sql.SqlToolset.LevenshteinDistance.Compute(textA.Value, textB.Value);
+			return SqlToolset.LevenshteinDistance.Compute(textA.Value, textB.Value);
 		}
 
 		private const Char DefaultSeparator = ',';

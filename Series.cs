@@ -9,7 +9,7 @@ using System.Threading;
 using Meisui.Random;
 using Microsoft.SqlServer.Server;
 
-namespace Skra.Sql.SqlToolset
+namespace SqlToolset
 {
 	public class Series
 	{

@@ -116,7 +116,7 @@ if exists(select * from sys.assemblies where name = 'SqlToolset')
 	drop assembly SqlToolset
 go
 
-create assembly SqlToolset from 'd:\GitHub\SqlToolset\bin\Debug\Skra.Sql.SqlToolset.dll'
+create assembly SqlToolset from 'd:\GitHub\SqlToolset\bin\Debug\SqlToolset.dll'
 with PERMISSION_SET = safe
 go
 
@@ -126,82 +126,82 @@ returns table
 			[value] bigint,
 			[multiplier] bigint
 )
-external name [SqlToolset].[Skra.Sql.SqlToolset.MathFunctions].Digits
+external name [SqlToolset].[SqlToolset.MathFunctions].Digits
 go
 
 create aggregate Concatenate(@value nvarchar(4000))
 returns nvarchar(4000)
-external name [SqlToolset].[Skra.Sql.SqlToolset.Concatenate]
+external name [SqlToolset].[SqlToolset.Concatenate]
 go
 
 create function MatchesPattern(@pattern nvarchar(4000), @value nvarchar(4000))
 returns integer
-external name [SqlToolset].[Skra.Sql.SqlToolset.StringOperations].[MatchesPattern]
+external name [SqlToolset].[SqlToolset.StringOperations].[MatchesPattern]
 go
 
 create function MinDT2(@a datetime, @b datetime)
 returns datetime
-external name [SqlToolset].[Skra.Sql.SqlToolset.DateTimeOperations].MinDT2
+external name [SqlToolset].[SqlToolset.DateTimeOperations].MinDT2
 go
 
 create function CharAt(@a NVARCHAR(max), @index int)
 returns NCHAR(1)
-external name [SqlToolset].[Skra.Sql.SqlToolset.StringOperations].CharAt
+external name [SqlToolset].[SqlToolset.StringOperations].CharAt
 go
 
 create function MaxDT2(@a datetime, @b datetime)
 returns datetime
-external name [SqlToolset].[Skra.Sql.SqlToolset.DateTimeOperations].MaxDT2
+external name [SqlToolset].[SqlToolset.DateTimeOperations].MaxDT2
 go
 
 create function MinDT3(@a datetime, @b datetime, @c datetime)
 returns datetime
-external name [SqlToolset].[Skra.Sql.SqlToolset.DateTimeOperations].MinDT3
+external name [SqlToolset].[SqlToolset.DateTimeOperations].MinDT3
 go
 
 create function MaxDT3(@a datetime, @b datetime, @c datetime)
 returns datetime
-external name [SqlToolset].[Skra.Sql.SqlToolset.DateTimeOperations].MaxDT3
+external name [SqlToolset].[SqlToolset.DateTimeOperations].MaxDT3
 go
 
 create function LevenshteinDistance(@pattern nvarchar(4000), @value nvarchar(4000))
 returns integer
-external name [SqlToolset].[Skra.Sql.SqlToolset.StringOperations].[LevenshteinDistance]
+external name [SqlToolset].[SqlToolset.StringOperations].[LevenshteinDistance]
 go
 
 create function DaysInMonths(@year int)
 returns table ([Month] int, [Days] int)
-external name [SqlToolset].[Skra.Sql.SqlToolset.DateTimeOperations].DaysInMonths
+external name [SqlToolset].[SqlToolset.DateTimeOperations].DaysInMonths
 go
 
 create function CalculateDataMD5(@data varbinary(max))
 returns varbinary(max)
 with RETURNS NULL ON NULL INPUT
-external name [SqlToolset].[Skra.Sql.SqlToolset.BlobOperations].CalculateDataMD5
+external name [SqlToolset].[SqlToolset.BlobOperations].CalculateDataMD5
 go
 
 create function CalculateDataHash(@data varbinary(max), @hashName NVARCHAR(32))
 returns varbinary(max)
 with RETURNS NULL ON NULL INPUT
-external name [SqlToolset].[Skra.Sql.SqlToolset.BlobOperations].CalculateDataHash
+external name [SqlToolset].[SqlToolset.BlobOperations].CalculateDataHash
 go
 
 create function CalculateDataSHA(@data varbinary(max))
 returns varbinary(max)
 with RETURNS NULL ON NULL INPUT
-external name [SqlToolset].[Skra.Sql.SqlToolset.BlobOperations].CalculateDataSHA
+external name [SqlToolset].[SqlToolset.BlobOperations].CalculateDataSHA
 go
 
 create function DataCompression(@blob varbinary(max), @decompress bit)
 returns varbinary(max)
 with RETURNS NULL ON NULL INPUT
-external name [SqlToolset].[Skra.Sql.SqlToolset.BlobOperations].DataCompression
+external name [SqlToolset].[SqlToolset.BlobOperations].DataCompression
 go
 
 create function HexBufferToString(@blob varbinary(max))
 returns nvarchar(max)
 with RETURNS NULL ON NULL INPUT
-external name [SqlToolset].[Skra.Sql.SqlToolset.BlobOperations].HexBufferToString
+external name [SqlToolset].[SqlToolset.BlobOperations].HexBufferToString
 go
 
 create function Split(@input nvarchar(max), @separators nvarchar(max))
@@ -209,7 +209,7 @@ returns table
 (
 			[value] nvarchar(max)
 )
-external name [SqlToolset].[Skra.Sql.SqlToolset.StringOperations].Split
+external name [SqlToolset].[SqlToolset.StringOperations].Split
 go
 
 create function SplitToInts(@input nvarchar(max), @separators nvarchar(max))
@@ -217,7 +217,7 @@ returns table
 (
 			[value] bigint
 )
-external name [SqlToolset].[Skra.Sql.SqlToolset.StringOperations].SplitToInts
+external name [SqlToolset].[SqlToolset.StringOperations].SplitToInts
 go
 
 create function CalculateCharacters(@input nvarchar(max))
@@ -226,44 +226,44 @@ returns table
 			[character] NCHAR(1),
 			[count] INT
 )
-external name [SqlToolset].[Skra.Sql.SqlToolset.StringOperations].CalculateCharacters
+external name [SqlToolset].[SqlToolset.StringOperations].CalculateCharacters
 go
 
 create type [dbo].MacAddressType
-external name [SqlToolset].[Skra.Sql.SqlToolset.Types.MacAddressType]
+external name [SqlToolset].[SqlToolset.Types.MacAddressType]
 go
 
 create procedure BasicPivot
 @cmd nvarchar(max)
 as
-external name [SqlToolset].[Skra.Sql.SqlToolset.MiscelaneusTools].BasicPivot
+external name [SqlToolset].[SqlToolset.MiscelaneusTools].BasicPivot
 go
 
 create function MaxCommonDividor(@a bigint, @b bigint)
 returns bigint
-external name [SqlToolset].[Skra.Sql.SqlToolset.MathFunctions].MaxCommonDividor
+external name [SqlToolset].[SqlToolset.MathFunctions].MaxCommonDividor
 go
 
 create function CreateSeries(@a int, @b int, @n1 int, @n2 int)
 returns table ([n] int, [value] bigint)
-external name [SqlToolset].[Skra.Sql.SqlToolset.Series].CreateSeries
+external name [SqlToolset].[SqlToolset.Series].CreateSeries
 go
 
 create function CreateRandomIntSeries(@range int, @count int)
 returns table ([n] int, [value] bigint)
-external name [SqlToolset].[Skra.Sql.SqlToolset.Series].CreateRandomIntSeries
+external name [SqlToolset].[SqlToolset.Series].CreateRandomIntSeries
 go
 
 create function dbo.GetSystemUserNameFromBinary(@sid varbinary(max), @nullOnError bit)
 returns sysname
 as
-external name [SqlToolset].[Skra.Sql.SqlToolset.MiscelaneusTools].GetSystemUserNameFromBinary
+external name [SqlToolset].[SqlToolset.MiscelaneusTools].GetSystemUserNameFromBinary
 go
 
 create function dbo.GetSystemUserNameFromString(@sid sysname)
 returns sysname
 as
-external name [SqlToolset].[Skra.Sql.SqlToolset.MiscelaneusTools].GetSystemUserNameFromString
+external name [SqlToolset].[SqlToolset.MiscelaneusTools].GetSystemUserNameFromString
 go
 
 declare @w [dbo].MacAddressType

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data.SqlTypes;
 
-namespace Skra.Sql.SqlToolset
+namespace SqlToolset
 {
 	internal static class CommonDefinitions
 	{

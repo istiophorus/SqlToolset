@@ -5,7 +5,7 @@ using System.Data.Sql;
 using System.Data.SqlTypes;
 using Microsoft.SqlServer.Server;
 
-namespace Skra.Sql.SqlToolset
+namespace SqlToolset
 {
 	[Serializable]
 	[SqlUserDefinedAggregate(Format.UserDefined,

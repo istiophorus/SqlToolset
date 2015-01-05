@@ -8,8 +8,8 @@
     <ProjectGuid>{3DB64E9B-75C8-4861-B052-663A8F1EE5A9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Skra.Sql.SqlToolset</RootNamespace>
-    <AssemblyName>Skra.Sql.SqlToolset</AssemblyName>
+    <RootNamespace>SqlToolset</RootNamespace>
+    <AssemblyName>SqlToolset</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>

@@ -6,7 +6,7 @@ using Microsoft.SqlServer.Server;
 using System.Text.RegularExpressions;
 using System.Globalization;
 
-namespace Skra.Sql.SqlToolset.Types
+namespace SqlToolset.Types
 {
 	[SqlUserDefinedType(Format.UserDefined, MaxByteSize = MacAddressType.MacAddressSize)]
 	public struct MacAddressType : INullable, IBinarySerialize

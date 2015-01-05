@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Skra.Sql.SqlToolset
+namespace SqlToolset
 {
 	/// <summary>
 	/// Levenshtein algorithm implementation taken from 
