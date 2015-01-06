@@ -48,6 +48,22 @@ if exists(select * from sys.objects where name = 'MaxDT3' and type = 'FS')
 	drop function dbo.MaxDT3
 go
 
+if exists(select * from sys.objects where name = 'ApplyLimitsInt' and type = 'FS')	
+	drop function dbo.ApplyLimitsInt
+go
+
+if exists(select * from sys.objects where name = 'ApplyLimitsDateTime' and type = 'FS')	
+	drop function dbo.ApplyLimitsDateTime
+go
+
+if exists(select * from sys.objects where name = 'ApplyLimitsByte' and type = 'FS')	
+	drop function dbo.ApplyLimitsByte
+go
+
+if exists(select * from sys.objects where name = 'ApplyLimitsDouble' and type = 'FS')	
+	drop function dbo.ApplyLimitsDouble
+go
+
 if exists(select * from sys.objects where name = 'LevenshteinDistance' and type = 'FS')	
 	drop function dbo.LevenshteinDistance
 go
@@ -180,6 +196,26 @@ go
 create function MaxDT3(@a datetime, @b datetime, @c datetime)
 returns datetime
 external name [SqlToolset].[SqlToolset.DateTimeOperations].MaxDT3
+go
+
+create function ApplyLimitsDateTime(@input datetime, @min datetime, @max datetime)
+returns datetime
+external name [SqlToolset].[SqlToolset.DateTimeOperations].ApplyLimitsDateTime
+go
+
+create function ApplyLimitsInt(@input bigint, @min bigint, @max bigint)
+returns bigint
+external name [SqlToolset].[SqlToolset.MathFunctions].ApplyLimitsInt
+go
+
+create function ApplyLimitsByte(@input tinyint, @min tinyint, @max tinyint)
+returns tinyint
+external name [SqlToolset].[SqlToolset.MathFunctions].ApplyLimitsByte
+go
+
+create function ApplyLimitsDouble(@input float(53), @min float(53), @max float(53))
+returns float(53)
+external name [SqlToolset].[SqlToolset.MathFunctions].ApplyLimitsDouble
 go
 
 create function LevenshteinDistance(@pattern nvarchar(4000), @value nvarchar(4000))
@@ -453,3 +489,21 @@ select 4 as num union all select 9 union all select 16 union all select 69 union
 ) as inn
 go
 
+select dbo.ApplyLimitsInt(10, 20, 1000)
+select dbo.ApplyLimitsInt(10, 2, 1000)
+select dbo.ApplyLimitsInt(10, NULL, 1000)
+select dbo.ApplyLimitsInt(10000, NULL, 1000)
+select dbo.ApplyLimitsInt(NULL, NULL, 1000)
+go
+
+select dbo.ApplyLimitsDouble(10.5, 10, 1000)
+select dbo.ApplyLimitsDouble(9.56789, 10, 1000)
+select dbo.ApplyLimitsDouble(9.1234, NULL, 1000)
+select dbo.ApplyLimitsDouble(10000, NULL, 1000)
+select dbo.ApplyLimitsDouble(NULL, NULL, 1000)
+go
+
+select dbo.ApplyLimitsDateTime('2011-01-01 12:04:12', '2010-01-02 11:04:12', '2013-01-02 11:04:12')
+select dbo.ApplyLimitsDateTime('2010-01-01 12:04:12', '2012-01-02 11:04:12', '2013-01-02 11:04:12')
+select dbo.ApplyLimitsDateTime('1900-01-01 12:04:12', NULL, '2013-01-02 11:04:12')
+go

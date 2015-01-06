@@ -102,5 +102,68 @@ namespace SqlToolset
 
 			multiplier = new SqlInt64(tempValue.B);
 		}
+
+		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
+		public static SqlInt64 ApplyLimitsInt(SqlInt64 input, SqlInt64 lowerLimit, SqlInt64 upperLimit)
+		{
+			if (input.IsNull)
+			{
+				return SqlInt64.Null;
+			}
+
+			if (lowerLimit.IsNull)
+			{
+				lowerLimit = SqlInt64.MinValue;
+			}
+
+			if (upperLimit.IsNull)
+			{
+				upperLimit = SqlInt64.MaxValue;
+			}
+
+			return InternalTools.ApplyLimits(input, lowerLimit, upperLimit);
+		}
+
+		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
+		public static SqlByte ApplyLimitsByte(SqlByte input, SqlByte lowerLimit, SqlByte upperLimit)
+		{
+			if (input.IsNull)
+			{
+				return SqlByte.Null;
+			}
+
+			if (lowerLimit.IsNull)
+			{
+				lowerLimit = SqlByte.MinValue;
+			}
+
+			if (upperLimit.IsNull)
+			{
+				upperLimit = SqlByte.MaxValue;
+			}
+
+			return InternalTools.ApplyLimits(input, lowerLimit, upperLimit);
+		}
+
+		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = false, IsDeterministic = true)]
+		public static SqlDouble ApplyLimitsDouble(SqlDouble input, SqlDouble lowerLimit, SqlDouble upperLimit)
+		{
+			if (input.IsNull)
+			{
+				return SqlDouble.Null;
+			}
+
+			if (lowerLimit.IsNull)
+			{
+				lowerLimit = SqlDouble.MinValue;
+			}
+
+			if (upperLimit.IsNull)
+			{
+				upperLimit = SqlDouble.MaxValue;
+			}
+
+			return InternalTools.ApplyLimits(input, lowerLimit, upperLimit);
+		}
 	}
 }

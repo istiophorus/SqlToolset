@@ -190,7 +190,7 @@ namespace SqlToolset
 		{
 			if (maxValue.CompareTo(minValue) < 0)
 			{
-				throw new ArgumentOutOfRangeException();
+				throw new ArgumentOutOfRangeException("Max value is lower then min value.");
 			}
 
 			T result = value;

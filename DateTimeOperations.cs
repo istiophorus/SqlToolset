@@ -10,6 +10,27 @@ namespace SqlToolset
 	public sealed class DateTimeOperations
 	{
 		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
+		public static SqlDateTime ApplyLimitsDateTime(SqlDateTime input, SqlDateTime lowerLimit, SqlDateTime upperLimit)
+		{
+			if (input.IsNull)
+			{
+				return SqlDateTime.Null;
+			}
+
+			if (lowerLimit.IsNull)
+			{
+				lowerLimit = SqlDateTime.MinValue;
+			}
+
+			if (upperLimit.IsNull)
+			{
+				upperLimit = SqlDateTime.MaxValue;
+			}
+
+			return InternalTools.ApplyLimits(input, lowerLimit, upperLimit);
+		}
+
+		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
 		public static SqlDateTime MinDT3(SqlDateTime inputA, SqlDateTime inputB, SqlDateTime inputC)
 		{
 			return InternalTools.GetMinValue3(inputA, inputB, inputC, SqlDateTime.Null);
