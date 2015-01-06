@@ -9,16 +9,18 @@ namespace SqlToolset.Aggregations
 {
 	[Serializable]
 	[SqlUserDefinedAggregate(Format.UserDefined,
-		MaxByteSize = HarmonicMean.MaxByteSize,
+		MaxByteSize = GeometricMean.MaxByteSize,
 		IsInvariantToNulls = true,
 		IsInvariantToOrder = true,
 		IsInvariantToDuplicates = false,
 		IsNullIfEmpty = true)]
-	public sealed class HarmonicMean : IBinarySerialize
+	public sealed class GeometricMean : IBinarySerialize
 	{
-		private const Int32 MaxByteSize = sizeof(Double) + sizeof(UInt64);
+		private const Int32 MaxByteSize = sizeof(Double) + sizeof(UInt64) + sizeof(Byte);
 
 		private Double _currentSum;
+
+		private Boolean _resultIsZero;
 
 		private UInt64 _items;
 
@@ -33,26 +35,48 @@ namespace SqlToolset.Aggregations
 				return;
 			}
 
+			if (_resultIsZero)
+			{
+				return;
+			}
+
 			Double currentValue = value.Value;
+
+			if (currentValue < 0.0)
+			{
+				throw new ArithmeticException("Unexpected negative value " + currentValue);
+			}
 
 			if (currentValue == 0.0)
 			{
-				throw new DivideByZeroException();
+				_resultIsZero = true;
+
+				return;
 			}
 
 			checked
 			{
-				_currentSum += 1.0 / currentValue;
+				_currentSum += Math.Log(currentValue);
 
 				_items++;
 			}
 		}
 
-		public void Merge(HarmonicMean other)
+		public void Merge(GeometricMean other)
 		{
 			if (null == other)
 			{
 				throw new ArgumentNullException("other");
+			}
+
+			if (other._resultIsZero)
+			{
+				_resultIsZero = true;
+			}
+
+			if (_resultIsZero)
+			{
+				return;
 			}
 
 			checked
@@ -65,6 +89,11 @@ namespace SqlToolset.Aggregations
 
 		public SqlDouble Terminate()
 		{
+			if (_resultIsZero)
+			{
+				return SqlDouble.Zero;
+			}
+
 			if (_items == 0)
 			{
 				return SqlDouble.Null;
@@ -77,12 +106,12 @@ namespace SqlToolset.Aggregations
 
 			if (Double.IsInfinity(_currentSum))
 			{
-				return SqlDouble.Zero;
+				return SqlDouble.Null;
 			}
 
 			checked
 			{
-				Double result = _items / _currentSum;
+				Double result = Math.Exp(_currentSum / _items);
 
 				if (Double.IsNaN(result))
 				{
@@ -107,11 +136,16 @@ namespace SqlToolset.Aggregations
 				throw new ArgumentNullException("reader");
 			}
 
-			_items = reader.ReadUInt64();
+			_resultIsZero = reader.ReadBoolean();
 
-			if (_items > 0)
+			if (!_resultIsZero)
 			{
-				_currentSum = reader.ReadDouble();
+				_items = reader.ReadUInt64();
+
+				if (_items > 0)
+				{
+					_currentSum = reader.ReadDouble();
+				}
 			}
 		}
 
@@ -122,11 +156,16 @@ namespace SqlToolset.Aggregations
 				throw new ArgumentNullException("writer");
 			}
 
-			writer.Write(_items);
+			writer.Write(_resultIsZero);
 
-			if (_items > 0)
+			if (!_resultIsZero)
 			{
-				writer.Write(_currentSum);
+				writer.Write(_items);
+
+				if (_items > 0)
+				{
+					writer.Write(_currentSum);
+				}
 			}
 		}
 

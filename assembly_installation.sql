@@ -16,6 +16,10 @@ if exists(select * from sys.objects where name = 'Concatenate' and type = 'AF')
 	drop aggregate Concatenate
 go
 
+if exists(select * from sys.objects where name = 'GeometricMean' and type = 'AF')
+	drop aggregate GeometricMean
+go
+
 if exists(select * from sys.objects where name = 'HarmonicMean' and type = 'AF')
 	drop aggregate HarmonicMean
 go
@@ -143,6 +147,10 @@ returns float(53)
 external name [SqlToolset].[SqlToolset.Aggregations.HarmonicMean]
 go
 
+create aggregate GeometricMean(@value float(53))
+returns float(53)
+external name [SqlToolset].[SqlToolset.Aggregations.GeometricMean]
+go
 
 create function MatchesPattern(@pattern nvarchar(4000), @value nvarchar(4000))
 returns integer
@@ -418,4 +426,30 @@ from
 (
 select 2 as num union all select 2
 ) as inn
+
+select dbo.HarmonicMean(num)
+from
+(
+select 1 as num union all select 2 union all select 3 union all select 4
+) as inn
 GO
+
+select dbo.GeometricMean(num)
+from
+(
+select 2 as num union all select 2 union all select 5 union all select 7
+) as inn
+
+select dbo.GeometricMean(num)
+from
+(
+select 0 as num union all select 2 union all select 5 union all select 7
+) as inn
+
+select dbo.GeometricMean(num)
+from
+(
+select 4 as num union all select 9 union all select 16 union all select 69 union all select 42
+) as inn
+go
+

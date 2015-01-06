@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aggregations\GeometricMean.cs" />
     <Compile Include="Aggregations\HarmonicMean.cs" />
     <Compile Include="BlobOperations.cs" />
     <Compile Include="CommonDefinitions.cs" />
