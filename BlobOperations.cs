@@ -123,7 +123,6 @@ namespace SqlToolset
 			return InternalTools.HexBufferToString(blob.Value);
 		}
 
-
 		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
 		public static SqlBytes CalculateDataHash(SqlBytes data, SqlString hashName)
 		{
@@ -141,7 +140,6 @@ namespace SqlToolset
 
 			return new SqlBytes(hash.ComputeHash(data.Value));
 		}
-
 
 		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
 		public static SqlBytes CalculateDataMD5(SqlBytes data)
