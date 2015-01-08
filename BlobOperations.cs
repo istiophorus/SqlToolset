@@ -52,7 +52,7 @@ namespace SqlToolset
 		private const Int32 BufferSize = 8192;
 
 		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
-		public static SqlBytes DataCompression(SqlBytes blob, SqlBoolean decompress)
+		public static SqlBytes DataCompression(SqlBytes blob, SqlBoolean compress)
 		{
 			if (blob.IsNull)
 			{
@@ -61,9 +61,9 @@ namespace SqlToolset
 
 			CompressionMode mode = CompressionMode.Compress;
 
-			if (!decompress.IsNull)
+			if (!compress.IsNull)
 			{
-				if (decompress.Value == SqlBoolean.False)
+				if (compress.Value == SqlBoolean.False)
 				{
 					mode = CompressionMode.Decompress;
 				}

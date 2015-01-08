@@ -246,7 +246,7 @@ with RETURNS NULL ON NULL INPUT
 external name [SqlToolset].[SqlToolset.BlobOperations].CalculateDataSHA
 go
 
-create function DataCompression(@blob varbinary(max), @decompress bit)
+create function DataCompression(@blob varbinary(max), @compress bit)
 returns varbinary(max)
 with RETURNS NULL ON NULL INPUT
 external name [SqlToolset].[SqlToolset.BlobOperations].DataCompression
