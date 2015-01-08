@@ -54,6 +54,11 @@ namespace SqlToolset
 		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
 		public static SqlBytes DataCompression(SqlBytes blob, SqlBoolean compress)
 		{
+			if (null == blob)
+			{
+				return SqlBytes.Null;
+			}
+
 			if (blob.IsNull)
 			{
 				return SqlBytes.Null;
@@ -126,6 +131,11 @@ namespace SqlToolset
 		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
 		public static SqlBytes CalculateDataHash(SqlBytes data, SqlString hashName)
 		{
+			if (null == data)
+			{
+				return SqlBytes.Null;
+			}
+
 			if (data.IsNull)
 			{
 				return SqlBytes.Null;
@@ -144,6 +154,11 @@ namespace SqlToolset
 		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
 		public static SqlBytes CalculateDataMD5(SqlBytes data)
 		{
+			if (null == data)
+			{
+				return SqlBytes.Null;
+			}
+
 			if (data.IsNull)
 			{
 				return SqlBytes.Null;
@@ -157,6 +172,11 @@ namespace SqlToolset
 		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
 		public static SqlBytes CalculateDataSHA(SqlBytes data)
 		{
+			if (null == data)
+			{
+				return SqlBytes.Null;
+			}
+
 			if (data.IsNull)
 			{
 				return SqlBytes.Null;
