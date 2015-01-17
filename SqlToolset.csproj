@@ -61,8 +61,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aggregations\And.cs" />
     <Compile Include="Aggregations\GeometricMean.cs" />
     <Compile Include="Aggregations\HarmonicMean.cs" />
+    <Compile Include="Aggregations\Or.cs" />
+    <Compile Include="Aggregations\Xor.cs" />
     <Compile Include="BlobOperations.cs" />
     <Compile Include="CommonDefinitions.cs" />
     <Compile Include="Concatenate.cs" />

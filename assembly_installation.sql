@@ -16,6 +16,18 @@ if exists(select * from sys.objects where name = 'Concatenate' and type = 'AF')
 	drop aggregate Concatenate
 go
 
+if exists(select * from sys.objects where name = 'Xor' and type = 'AF')
+	drop aggregate Xor
+go
+
+if exists(select * from sys.objects where name = 'And' and type = 'AF')
+	drop aggregate [And]
+go
+
+if exists(select * from sys.objects where name = 'Or' and type = 'AF')
+	drop aggregate [Or]
+go
+
 if exists(select * from sys.objects where name = 'GeometricMean' and type = 'AF')
 	drop aggregate GeometricMean
 go
@@ -156,6 +168,21 @@ go
 create aggregate Concatenate(@value nvarchar(4000))
 returns nvarchar(4000)
 external name [SqlToolset].[SqlToolset.Concatenate]
+go
+
+create aggregate Xor(@value bigint)
+returns bigint
+external name [SqlToolset].[SqlToolset.Aggregations.Xor]
+go
+
+create aggregate [And](@value bigint)
+returns bigint
+external name [SqlToolset].[SqlToolset.Aggregations.And]
+go
+
+create aggregate [Or](@value bigint)
+returns bigint
+external name [SqlToolset].[SqlToolset.Aggregations.Or]
 go
 
 create aggregate HarmonicMean(@value float(53))
@@ -507,3 +534,25 @@ select dbo.ApplyLimitsDateTime('2011-01-01 12:04:12', '2010-01-02 11:04:12', '20
 select dbo.ApplyLimitsDateTime('2010-01-01 12:04:12', '2012-01-02 11:04:12', '2013-01-02 11:04:12')
 select dbo.ApplyLimitsDateTime('1900-01-01 12:04:12', NULL, '2013-01-02 11:04:12')
 go
+
+select dbo.Xor(num)
+from
+(
+select 4 as num union all select 9 union all select 16 union all select 69 union all select 42
+) as inn
+go
+
+select dbo.[And](num)
+from
+(
+select 6 as num union all select 10 --union all select 16 union all select 70 union all select 42 union all select 2
+) as inn
+go
+
+select dbo.[Or](num)
+from
+(
+select 4 as num union all select 9 --union all select 16 union all select 69 union all select 42
+) as inn
+go 
+
