@@ -87,6 +87,54 @@ namespace SqlToolset
 		}
 
 		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
+		public static SqlDateTime CreateDateExt(SqlInt16 year, SqlByte month, SqlByte day)
+		{
+			if (year.IsNull || month.IsNull || day.IsNull)
+			{
+				return SqlDateTime.Null;
+			}
+
+			try
+			{
+				DateTime dt = new DateTime(year.Value, 1, 1);
+
+				dt = dt.AddMonths(month.Value - 1);
+
+				dt = dt.AddDays(day.Value - 1);
+
+				SqlDateTime result = new SqlDateTime(dt);
+
+				return result;
+			}
+			catch (Exception)
+			{
+				return SqlDateTime.Null;
+			}
+		}
+
+		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
+		public static SqlDateTime CreateDate(SqlInt16 year, SqlByte month, SqlByte day)
+		{
+			if (year.IsNull || month.IsNull || day.IsNull)
+			{
+				return SqlDateTime.Null;
+			}
+
+			try
+			{
+				DateTime dt = new DateTime(year.Value, month.Value, day.Value);
+
+				SqlDateTime result = new SqlDateTime(dt);
+
+				return result;
+			}
+			catch (Exception )
+			{
+				return SqlDateTime.Null;
+			}
+		}
+
+		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
 		public static SqlDateTime MaxDT2(SqlDateTime inputA, SqlDateTime inputB)
 		{
 			return InternalTools.GetMaxValue(inputA, inputB, SqlDateTime.Null);

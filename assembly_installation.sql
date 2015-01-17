@@ -44,6 +44,14 @@ if exists(select * from sys.objects where name = 'MinDT2' and type = 'FS')
 	drop function dbo.MinDT2
 go
 
+if exists(select * from sys.objects where name = 'CreateDate' and type = 'FS')	
+	drop function dbo.CreateDate
+go
+
+if exists(select * from sys.objects where name = 'CreateDateExt' and type = 'FS')	
+	drop function dbo.CreateDateExt
+go
+
 if exists(select * from sys.objects where name = 'CharAt' and type = 'FS')	
 	drop function dbo.CharAt
 go
@@ -207,6 +215,16 @@ go
 create function MinDT2(@a datetime, @b datetime)
 returns datetime
 external name [SqlToolset].[SqlToolset.DateTimeOperations].MinDT2
+go
+
+create function CreateDate(@year smallint, @month tinyint, @day tinyint)
+returns datetime
+external name [SqlToolset].[SqlToolset.DateTimeOperations].CreateDate
+go
+
+create function CreateDateExt(@year smallint, @month tinyint, @day tinyint)
+returns datetime
+external name [SqlToolset].[SqlToolset.DateTimeOperations].CreateDateExt
 go
 
 create function CharAt(@a NVARCHAR(max), @index int)
@@ -569,4 +587,14 @@ select dbo.SwitchCase(N'AbCdEfGhIjKl•ÊèÒ')
 select dbo.SwitchCase(N'11111AbCdEfGhIjKl•ÊèÒ')
 select dbo.SwitchCase(N'')
 select dbo.SwitchCase(null)
+go
+
+select dbo.CreateDate(0,1,1)
+select dbo.CreateDate(2014,12,12)
+select dbo.CreateDate(2014,1,1)
+select dbo.CreateDate(2014,2,28)
+select dbo.CreateDate(0,0,0)
+go
+
+select dbo.CreateDateExt(2014, 12, 229)
 go
