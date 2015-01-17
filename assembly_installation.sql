@@ -561,6 +561,10 @@ select dbo.ApplyLimitsDateTime('2011-01-01 12:04:12', '2010-01-02 11:04:12', '20
 select dbo.ApplyLimitsDateTime('2010-01-01 12:04:12', '2012-01-02 11:04:12', '2013-01-02 11:04:12')
 select dbo.ApplyLimitsDateTime('1900-01-01 12:04:12', NULL, '2013-01-02 11:04:12')
 go
+/*
+ * changed: 2015.01.17
+ * description: adding new aggregations and datetime functions 
+ */
 
 select dbo.Xor(num)
 from
