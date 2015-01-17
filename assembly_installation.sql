@@ -80,6 +80,10 @@ if exists(select * from sys.objects where name = 'LevenshteinDistance' and type 
 	drop function dbo.LevenshteinDistance
 go
 
+if exists(select * from sys.objects where name = 'SwitchCase' and type = 'FS')	
+	drop function dbo.SwitchCase
+go
+
 if exists(select * from sys.objects where name = 'CalculateDataMD5' and type = 'FS')	
 	drop function dbo.CalculateDataMD5
 go
@@ -248,6 +252,11 @@ go
 create function LevenshteinDistance(@pattern nvarchar(4000), @value nvarchar(4000))
 returns integer
 external name [SqlToolset].[SqlToolset.StringOperations].[LevenshteinDistance]
+go
+
+create function SwitchCase(@input nvarchar(4000))
+returns nvarchar(4000)
+external name [SqlToolset].[SqlToolset.StringOperations].[SwitchCase]
 go
 
 create function DaysInMonths(@year int)
@@ -556,3 +565,8 @@ select 4 as num union all select 9 --union all select 16 union all select 69 uni
 ) as inn
 go 
 
+select dbo.SwitchCase(N'AbCdEfGhIjKl•ÊèÒ')
+select dbo.SwitchCase(N'11111AbCdEfGhIjKl•ÊèÒ')
+select dbo.SwitchCase(N'')
+select dbo.SwitchCase(null)
+go

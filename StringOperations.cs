@@ -44,6 +44,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.SqlServer.Server;
 using System.Linq;
+using System.Globalization;
 
 namespace SqlToolset
 {
@@ -106,6 +107,40 @@ namespace SqlToolset
 			}
 
 			return SqlToolset.LevenshteinDistance.Compute(textA.Value, textB.Value);
+		}
+
+		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
+		public static SqlString SwitchCase(SqlString input)
+		{
+			if (input.IsNull)
+			{
+				return SqlString.Null;
+			}
+
+			Char[] chars = input.Value.ToCharArray();
+
+			List<Char> result = new List<Char>();
+
+			for (Int32 q = 0; q < chars.Length; q++)
+			{
+				Char current = chars[q];
+
+				if (Char.IsLetter(current))
+				{
+					if (Char.IsUpper(current))
+					{
+						current = Char.ToLower(current);
+					}
+					else if (Char.IsLower(current))
+					{
+						current = Char.ToUpper(current);
+					}
+				}
+
+				result.Add(current);
+			}
+
+			return new SqlString(new String(result.ToArray()));
 		}
 
 		private const Char DefaultSeparator = ',';
