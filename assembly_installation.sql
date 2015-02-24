@@ -140,6 +140,14 @@ if exists(select * from sys.objects where name = 'MaxCommonDividor' and type = '
 	drop function dbo.MaxCommonDividor
 go
 
+if exists(select * from sys.objects where name = 'ShiftRightBigint' and type = 'FS')	
+	drop function dbo.ShiftRightBigint
+go
+
+if exists(select * from sys.objects where name = 'ShiftLeftBigint' and type = 'FS')	
+	drop function dbo.ShiftLeftBigint
+go
+
 if exists(select * from sys.objects where name = 'CreateSeries' and type = 'FT')	
 	drop function dbo.CreateSeries
 go
@@ -350,6 +358,16 @@ go
 create function MaxCommonDividor(@a bigint, @b bigint)
 returns bigint
 external name [SqlToolset].[SqlToolset.MathFunctions].MaxCommonDividor
+go
+
+create function ShiftLeftBigint(@a bigint, @b tinyint)
+returns bigint
+external name [SqlToolset].[SqlToolset.MathFunctions].ShiftLeftBigint
+go
+
+create function ShiftRightBigint(@a bigint, @b tinyint)
+returns bigint
+external name [SqlToolset].[SqlToolset.MathFunctions].ShiftRightBigint
 go
 
 create function CreateSeries(@a int, @b int, @n1 int, @n2 int)
@@ -601,4 +619,13 @@ select dbo.CreateDate(0,0,0)
 go
 
 select dbo.CreateDateExt(2014, 12, 229)
+go
+
+select dbo.ShiftLeftBigint(2, 60)
+select dbo.ShiftLeftBigint(2, 64)
+go
+select dbo.ShiftRightBigint(2, 65)
+go
+
+select dbo.ShiftRightBigint(dbo.ShiftLeftBigint(2324, 17), 17)
 go

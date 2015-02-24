@@ -48,6 +48,54 @@ namespace SqlToolset
 {
     public class MathFunctions
 	{
+		private const Byte Int64SizeBits = sizeof(Int64) * 8;
+
+		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
+		public static SqlInt64 ShiftLeftBigint(SqlInt64 input, SqlByte bits)
+		{
+			if (input.IsNull)
+			{
+				return SqlInt64.Null;
+			}
+
+			if (bits.IsNull)
+			{
+				return SqlInt64.Null;
+			}
+
+			Byte bitsValue = bits.Value;
+
+			if (bitsValue >= Int64SizeBits)
+			{
+				return 0;
+			}
+
+			return input.Value << bitsValue;
+		}
+
+		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
+		public static SqlInt64 ShiftRightBigint(SqlInt64 input, SqlByte bits)
+		{
+			if (input.IsNull)
+			{
+				return SqlInt64.Null;
+			}
+
+			if (bits.IsNull)
+			{
+				return SqlInt64.Null;
+			}
+
+			Byte bitsValue = bits.Value;
+
+			if (bitsValue >= Int64SizeBits)
+			{
+				return 0;
+			}
+
+			return input.Value >> bitsValue;
+		}
+
 		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
 		public static SqlInt64 MaxCommonDividor(SqlInt64 _a, SqlInt64 _b)
         {
