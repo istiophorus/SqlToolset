@@ -148,6 +148,10 @@ if exists(select * from sys.objects where name = 'ShiftLeftBigint' and type = 'F
 	drop function dbo.ShiftLeftBigint
 go
 
+if exists(select * from sys.objects where name = 'ShiftLeftBinary' and type = 'FS')	
+	drop function dbo.ShiftLeftBinary
+go
+
 if exists(select * from sys.objects where name = 'CreateSeries' and type = 'FT')	
 	drop function dbo.CreateSeries
 go
@@ -357,16 +361,25 @@ go
 
 create function MaxCommonDividor(@a bigint, @b bigint)
 returns bigint
+with RETURNS NULL ON NULL INPUT
 external name [SqlToolset].[SqlToolset.MathFunctions].MaxCommonDividor
 go
 
 create function ShiftLeftBigint(@a bigint, @b tinyint)
 returns bigint
+with RETURNS NULL ON NULL INPUT
 external name [SqlToolset].[SqlToolset.MathFunctions].ShiftLeftBigint
+go
+
+create function ShiftLeftBinary(@a varbinary(max), @b tinyint)
+returns varbinary(max)
+with RETURNS NULL ON NULL INPUT
+external name [SqlToolset].[SqlToolset.MathFunctions].ShiftLeftBinary
 go
 
 create function ShiftRightBigint(@a bigint, @b tinyint)
 returns bigint
+with RETURNS NULL ON NULL INPUT
 external name [SqlToolset].[SqlToolset.MathFunctions].ShiftRightBigint
 go
 
@@ -628,4 +641,9 @@ select dbo.ShiftRightBigint(2, 65)
 go
 
 select dbo.ShiftRightBigint(dbo.ShiftLeftBigint(2324, 17), 17)
+go
+
+select dbo.ShiftLeftBinary(0x0001, 1)
+select dbo.ShiftLeftBinary(0x0001, 4)
+select dbo.ShiftLeftBinary(0x0001, 15)
 go

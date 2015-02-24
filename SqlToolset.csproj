@@ -71,6 +71,7 @@
     <Compile Include="Concatenate.cs" />
     <Compile Include="Aggregations\IAggregation.cs" />
     <Compile Include="DateTimeOperations.cs" />
+    <Compile Include="EmptyArrayTemplate.cs" />
     <Compile Include="InternalTools.cs" />
     <Compile Include="LevenshteinDistance.cs" />
     <Compile Include="MersenneTwister.cs" />

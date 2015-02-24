@@ -50,6 +50,93 @@ namespace SqlToolset
 	{
 		private const Byte Int64SizeBits = sizeof(Int64) * 8;
 
+		private static readonly Byte[] LeftMasks = new Byte[]
+			{
+				0x00,
+				0x80,
+				0xC0,
+				0xE0,
+				0xF0,
+				0xF8,
+				0xFC,
+				0xFE,
+				0xFF
+			};
+
+		private static readonly Byte[] RightMasks = new Byte[]
+			{
+				0xFF,
+				0x7F,
+				0x3F,
+				0x1F,
+				0x0F,
+				0x07,
+				0x03,
+				0x01,
+				0x00
+			};
+
+		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
+		public static SqlBinary ShiftLeftBinary(SqlBinary input, SqlByte bits)
+		{
+			if (input.IsNull)
+			{
+				return SqlBinary.Null;
+			}
+
+			if (bits.IsNull)
+			{
+				return SqlBinary.Null;
+			}
+
+			if (input.Length <= 0)
+			{
+				return EmptyArrayTemplate<Byte>.Instance;
+			}
+
+			Byte bitsValue = bits.Value;
+
+			if (bitsValue == 0) //// trivial case
+			{
+				return input;
+			}
+
+			Byte[] result = (Byte[])input.Value.Clone();
+
+			Int32 bytesOffset = bitsValue / 8;
+			Int32 bitsOffset = bitsValue % 8;
+
+			for (Int32 q = 0; q < result.Length; q++)
+			{
+				Byte firstByte = 0;
+
+				if (q + bytesOffset < result.Length)
+				{
+					firstByte = result[q + bytesOffset];
+				}
+
+				Byte secondByte = 0;
+
+				if (1 + q + bytesOffset < result.Length)
+				{
+					secondByte = result[1 + q + bytesOffset];
+				}
+
+				if (firstByte != 0 || secondByte != 0)
+				{
+					result[q] = (Byte)(
+						((firstByte & RightMasks[bitsOffset]) << bitsOffset) |
+						((secondByte & LeftMasks[bitsOffset]) >> (8 - bitsOffset)));
+				}
+				else
+				{
+					result[q] = 0;
+				}
+			}
+
+			return result;
+		}
+
 		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
 		public static SqlInt64 ShiftLeftBigint(SqlInt64 input, SqlByte bits)
 		{
