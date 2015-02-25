@@ -11,20 +11,40 @@ namespace SqlToolset.Tests
 	{
 		[TestMethod]
 		[ExpectedException(typeof(ArgumentNullException))]
-		public void TestNull()
+		public void TestShiftBitsRightNull()
+		{
+			BitsShifter.ShiftBitsRight(null, 1);
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(ArgumentOutOfRangeException))]
+		public void TestShiftBitsRightBigger()
+		{
+			BitsShifter.ShiftBitsRight(new Byte[BitsShifter.MaxAllowedBinarySize + 1], 1);
+		}
+
+		[TestMethod]
+		public void TestShiftBitsRightBig()
+		{
+			BitsShifter.ShiftBitsRight(new Byte[BitsShifter.MaxAllowedBinarySize], 01);
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(ArgumentNullException))]
+		public void TestShiftBitsLeftNull()
 		{
 			BitsShifter.ShiftBitsLeft(null, 1);
 		}
 
 		[TestMethod]
 		[ExpectedException(typeof(ArgumentOutOfRangeException))]
-		public void TestBigger()
+		public void TestShiftBitsLeftBigger()
 		{
 			BitsShifter.ShiftBitsLeft(new Byte[BitsShifter.MaxAllowedBinarySize + 1], 1);
 		}
 
 		[TestMethod]
-		public void TestBig()
+		public void TestShiftBitsLeftBig()
 		{
 			BitsShifter.ShiftBitsLeft(new Byte[BitsShifter.MaxAllowedBinarySize],01);
 		}
