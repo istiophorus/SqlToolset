@@ -72,6 +72,27 @@ namespace SqlToolset
 		}
 
 		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
+		public static SqlBinary ShiftRightBinary(SqlBinary input, SqlByte bits)
+		{
+			if (input.IsNull)
+			{
+				return SqlBinary.Null;
+			}
+
+			if (input.Value.Length > BitsShifter.MaxAllowedBinarySize)
+			{
+				throw new ArgumentOutOfRangeException("Big varbinary objects are not supported");
+			}
+
+			if (bits.IsNull)
+			{
+				return SqlBinary.Null;
+			}
+
+			return BitsShifter.ShiftBitsRight(input.Value, bits.Value);
+		}
+
+		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
 		public static SqlInt64 ShiftLeftBigint(SqlInt64 input, SqlByte bits)
 		{
 			if (input.IsNull)

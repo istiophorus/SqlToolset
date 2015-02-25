@@ -29,25 +29,46 @@ namespace SqlToolset.Tests
 			BitsShifter.ShiftBitsLeft(new Byte[BitsShifter.MaxAllowedBinarySize],01);
 		}
 
-		private static void SingleSampleDataTest(Byte[] input, Byte[] expected, Byte bits)
+		private static void SingleShiftBitsLeftTest(Byte[] input, Byte[] expected, Byte bits)
 		{
 			Byte[] res = BitsShifter.ShiftBitsLeft(input, bits);
 
 			CollectionAssert.AreEqual(expected, res);
 		}
 
-		[TestMethod]
-		public void TestSampleBytes()
+		private static void SingleShiftBitsRightTest(Byte[] input, Byte[] expected, Byte bits)
 		{
-			SingleSampleDataTest(new Byte[] { 0x00, 0x01 }, new Byte[] { 0x00, 0x02 }, 1);
+			Byte[] res = BitsShifter.ShiftBitsRight(input, bits);
 
-			SingleSampleDataTest(new Byte[] { 0x00, 0x01 }, new Byte[] { 0x00, 0x04 }, 2);
+			CollectionAssert.AreEqual(expected, res);
+		}
 
-			SingleSampleDataTest(new Byte[] { 0x00, 0x01 }, new Byte[] { 0x00, 0x08 }, 3);
+		[TestMethod]
+		public void TestShiftBitsLeftSampleBytes()
+		{
+			SingleShiftBitsLeftTest(new Byte[] { 0x00, 0x01 }, new Byte[] { 0x00, 0x02 }, 1);
 
-			SingleSampleDataTest(new Byte[] { 0x00, 0x01 }, new Byte[] { 0x02, 0x00 }, 9);
+			SingleShiftBitsLeftTest(new Byte[] { 0x00, 0x01 }, new Byte[] { 0x00, 0x04 }, 2);
 
-			SingleSampleDataTest(new Byte[] { 0x00, 0x01 }, new Byte[] { 0x08, 0x00 }, 11);
+			SingleShiftBitsLeftTest(new Byte[] { 0x00, 0x01 }, new Byte[] { 0x00, 0x08 }, 3);
+
+			SingleShiftBitsLeftTest(new Byte[] { 0x00, 0x01 }, new Byte[] { 0x02, 0x00 }, 9);
+
+			SingleShiftBitsLeftTest(new Byte[] { 0x00, 0x01 }, new Byte[] { 0x08, 0x00 }, 11);
+		}
+
+		[TestMethod]
+		public void TestShiftBitsRightSampleBytes()
+		{
+			SingleShiftBitsRightTest(new Byte[] { 0x00, 0x02 }, new Byte[] { 0x00, 0x01 }, 1);
+
+			SingleShiftBitsRightTest(new Byte[] { 0x00, 0x04 }, new Byte[] { 0x00, 0x01 }, 2);
+
+			SingleShiftBitsRightTest(new Byte[] { 0x00, 0x08 }, new Byte[] { 0x00, 0x01 }, 3);
+
+			SingleShiftBitsRightTest(new Byte[] { 0x02, 0x00 }, new Byte[] { 0x00, 0x01 }, 9);
+
+			SingleShiftBitsRightTest(new Byte[] { 0x08, 0x00 }, new Byte[] { 0x00, 0x01 }, 11);
 		}
 	}
 }

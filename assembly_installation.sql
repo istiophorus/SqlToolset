@@ -152,6 +152,10 @@ if exists(select * from sys.objects where name = 'ShiftLeftBinary' and type = 'F
 	drop function dbo.ShiftLeftBinary
 go
 
+if exists(select * from sys.objects where name = 'ShiftRightBinary' and type = 'FS')	
+	drop function dbo.ShiftRightBinary
+go
+
 if exists(select * from sys.objects where name = 'CreateSeries' and type = 'FT')	
 	drop function dbo.CreateSeries
 go
@@ -375,6 +379,12 @@ create function ShiftLeftBinary(@a varbinary(max), @b tinyint)
 returns varbinary(max)
 with RETURNS NULL ON NULL INPUT
 external name [SqlToolset].[SqlToolset.MathFunctions].ShiftLeftBinary
+go
+
+create function ShiftRightBinary(@a varbinary(max), @b tinyint)
+returns varbinary(max)
+with RETURNS NULL ON NULL INPUT
+external name [SqlToolset].[SqlToolset.MathFunctions].ShiftRightBinary
 go
 
 create function ShiftRightBigint(@a bigint, @b tinyint)
@@ -646,4 +656,9 @@ go
 select dbo.ShiftLeftBinary(0x0001, 1)
 select dbo.ShiftLeftBinary(0x0001, 4)
 select dbo.ShiftLeftBinary(0x0001, 15)
+go
+
+select dbo.ShiftRightBinary(0x1000, 1)
+select dbo.ShiftRightBinary(0x1000, 4)
+select dbo.ShiftRightBinary(0x8000, 15)
 go

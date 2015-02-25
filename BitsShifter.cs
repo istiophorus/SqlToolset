@@ -94,5 +94,65 @@ namespace SqlToolset
 
 			return result;
 		}
+
+		internal static Byte[] ShiftBitsRight(Byte[] input, Byte bits)
+		{
+			if (null == input)
+			{
+				throw new ArgumentNullException("input");
+			}
+
+			if (input.Length == 0)
+			{
+				return EmptyArrayTemplate<Byte>.Instance;
+			}
+
+			if (input.Length > MaxAllowedBinarySize)
+			{
+				throw new ArgumentOutOfRangeException("Large binary objects are not supported");
+			}
+
+			Byte bitsValue = bits;
+
+			if (bitsValue == 0) //// trivial case
+			{
+				return input;
+			}
+
+			Byte[] result = (Byte[])input.Clone();
+
+			Int32 bytesOffset = bitsValue / 8;
+			Int32 bitsOffset = bitsValue % 8;
+
+			for (Int32 q = result.Length - 1; q >= 0; q--)
+			{
+				Byte firstByte = 0;
+
+				if (q - bytesOffset >= 0)
+				{
+					firstByte = result[q - bytesOffset];
+				}
+
+				Byte secondByte = 0;
+
+				if (q - bytesOffset - 1 >= 0)
+				{
+					secondByte = result[q - bytesOffset - 1];
+				}
+
+				if (firstByte != 0 || secondByte != 0)
+				{
+					result[q] = (Byte)(
+						((firstByte & LeftMasks[8 - bitsOffset]) >> bitsOffset) |
+						((secondByte & RightMasks[8 - bitsOffset]) << (8 - bitsOffset)));
+				}
+				else
+				{
+					result[q] = 0;
+				}
+			}
+
+			return result;
+		}
 	}
 }
