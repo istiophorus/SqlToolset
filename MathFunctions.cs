@@ -51,7 +51,49 @@ namespace SqlToolset
 		private const Byte Int64SizeBits = sizeof(Int64) * 8;
 
 		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
-		public static SqlBinary ShiftLeftBinary(SqlBinary input, SqlByte bits)
+		public static SqlBinary RotateLeftBinary(SqlBinary input, SqlInt32 bits)
+		{
+			if (input.IsNull)
+			{
+				return SqlBinary.Null;
+			}
+
+			if (input.Value.Length > BitsShifter.MaxAllowedBinarySize)
+			{
+				throw new ArgumentOutOfRangeException("Big varbinary objects are not supported");
+			}
+
+			if (bits.IsNull)
+			{
+				return SqlBinary.Null;
+			}
+
+			return BitsShifter.RotateBitsLeft(input.Value, bits.Value);
+		}
+
+		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
+		public static SqlBinary RotateRightBinary(SqlBinary input, SqlInt32 bits)
+		{
+			if (input.IsNull)
+			{
+				return SqlBinary.Null;
+			}
+
+			if (input.Value.Length > BitsShifter.MaxAllowedBinarySize)
+			{
+				throw new ArgumentOutOfRangeException("Big varbinary objects are not supported");
+			}
+
+			if (bits.IsNull)
+			{
+				return SqlBinary.Null;
+			}
+
+			return BitsShifter.RotateBitsRight(input.Value, bits.Value);
+		}
+
+		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
+		public static SqlBinary ShiftLeftBinary(SqlBinary input, SqlInt32 bits)
 		{
 			if (input.IsNull)
 			{
@@ -72,7 +114,7 @@ namespace SqlToolset
 		}
 
 		[SqlFunction(DataAccess = DataAccessKind.None, IsPrecise = true, IsDeterministic = true)]
-		public static SqlBinary ShiftRightBinary(SqlBinary input, SqlByte bits)
+		public static SqlBinary ShiftRightBinary(SqlBinary input, SqlInt32 bits)
 		{
 			if (input.IsNull)
 			{

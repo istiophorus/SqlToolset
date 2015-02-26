@@ -148,6 +148,14 @@ if exists(select * from sys.objects where name = 'ShiftLeftBigint' and type = 'F
 	drop function dbo.ShiftLeftBigint
 go
 
+if exists(select * from sys.objects where name = 'RotateLeftBinary' and type = 'FS')	
+	drop function dbo.RotateLeftBinary
+go
+
+if exists(select * from sys.objects where name = 'RotateRightBinary' and type = 'FS')	
+	drop function dbo.RotateRightBinary
+go
+
 if exists(select * from sys.objects where name = 'ShiftLeftBinary' and type = 'FS')	
 	drop function dbo.ShiftLeftBinary
 go
@@ -375,13 +383,25 @@ with RETURNS NULL ON NULL INPUT
 external name [SqlToolset].[SqlToolset.MathFunctions].ShiftLeftBigint
 go
 
-create function ShiftLeftBinary(@a varbinary(max), @b tinyint)
+create function ShiftLeftBinary(@a varbinary(max), @b int)
 returns varbinary(max)
 with RETURNS NULL ON NULL INPUT
 external name [SqlToolset].[SqlToolset.MathFunctions].ShiftLeftBinary
 go
 
-create function ShiftRightBinary(@a varbinary(max), @b tinyint)
+create function RotateLeftBinary(@a varbinary(max), @b int)
+returns varbinary(max)
+with RETURNS NULL ON NULL INPUT
+external name [SqlToolset].[SqlToolset.MathFunctions].RotateLeftBinary
+go
+
+create function RotateRightBinary(@a varbinary(max), @b int)
+returns varbinary(max)
+with RETURNS NULL ON NULL INPUT
+external name [SqlToolset].[SqlToolset.MathFunctions].RotateRightBinary
+go
+
+create function ShiftRightBinary(@a varbinary(max), @b int)
 returns varbinary(max)
 with RETURNS NULL ON NULL INPUT
 external name [SqlToolset].[SqlToolset.MathFunctions].ShiftRightBinary
@@ -661,4 +681,15 @@ go
 select dbo.ShiftRightBinary(0x1000, 1)
 select dbo.ShiftRightBinary(0x1000, 4)
 select dbo.ShiftRightBinary(0x8000, 15)
+go
+
+select dbo.RotateLeftBinary(0x12345678, 1)
+select dbo.RotateLeftBinary(0x12345678, 2)
+select dbo.RotateLeftBinary(0x12345678, 3)
+select dbo.RotateLeftBinary(0x12345678, 4)
+select dbo.RotateLeftBinary(0x12345678, 1)
+select dbo.RotateLeftBinary(dbo.RotateLeftBinary(0x12345678, 1), 3)
+select dbo.RotateLeftBinary(0x12345678, 250)
+select dbo.RotateRightBinary(dbo.RotateLeftBinary(0x12345678, 250), 250)
+select dbo.RotateRightBinary(0x01, 2)
 go

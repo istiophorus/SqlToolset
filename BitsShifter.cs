@@ -33,9 +33,11 @@ namespace SqlToolset
 				0x00
 			};
 
+		private const Int32 BitsPerByte = 8;
+
 		internal static readonly Int32 MaxAllowedBinarySize = 8000;
 
-		internal static Byte[] ShiftBitsLeft(Byte[] input, Byte bits)
+		internal static Byte[] RotateBitsRight(Byte[] input, Int32 bits)
 		{
 			if (null == input)
 			{
@@ -52,7 +54,106 @@ namespace SqlToolset
 				throw new ArgumentOutOfRangeException("Large binary objects are not supported");
 			}
 
-			Byte bitsValue = bits;
+			Int32 bitsValue = bits;
+
+			if (bitsValue == 0) //// trivial case
+			{
+				return input;
+			}
+
+			bitsValue = (Byte)(bitsValue % (input.Length * BitsPerByte));
+
+			return RotateBitsLeft(input, input.Length * BitsPerByte - bitsValue);
+		}
+
+		internal static Byte[] RotateBitsLeft(Byte[] input, Int32 bits)
+		{
+			if (null == input)
+			{
+				throw new ArgumentNullException("input");
+			}
+
+			if (input.Length == 0)
+			{
+				return EmptyArrayTemplate<Byte>.Instance;
+			}
+
+			if (input.Length > MaxAllowedBinarySize)
+			{
+				throw new ArgumentOutOfRangeException("Large binary objects are not supported");
+			}
+
+			Int32 bitsValue = bits;
+
+			if (bitsValue == 0) //// trivial case
+			{
+				return input;
+			}
+
+			bitsValue = (Byte)(bitsValue % (input.Length * BitsPerByte));
+
+			Byte[] result = (Byte[])input.Clone();
+
+			Int32 bytesOffset = bitsValue / 8;
+			Int32 bitsOffset = bitsValue % 8;
+
+			for (Int32 q = 0; q < result.Length; q++)
+			{
+				Byte firstByte = 0;
+
+				if (q + bytesOffset < result.Length)
+				{
+					firstByte = input[q + bytesOffset];
+				}
+				else
+				{
+					firstByte = input[q + bytesOffset - result.Length];
+				}
+
+				Byte secondByte = 0;
+
+				if (1 + q + bytesOffset < result.Length)
+				{
+					secondByte = input[1 + q + bytesOffset];
+				}
+				else
+				{
+					secondByte = input[1 + q + bytesOffset - result.Length];
+				}
+
+				if (firstByte != 0 || secondByte != 0)
+				{
+					result[q] = (Byte)(
+						((firstByte & RightMasks[bitsOffset]) << bitsOffset) |
+						((secondByte & LeftMasks[bitsOffset]) >> (8 - bitsOffset)));
+				}
+				else
+				{
+					result[q] = 0;
+				}
+			}
+
+			return result;
+		}
+
+		internal static Byte[] ShiftBitsLeft(Byte[] input, Int32 bits)
+		{
+			if (null == input)
+			{
+				throw new ArgumentNullException("input");
+			}
+
+			if (input.Length == 0)
+			{
+				return EmptyArrayTemplate<Byte>.Instance;
+			}
+
+			if (input.Length > MaxAllowedBinarySize)
+			{
+				throw new ArgumentOutOfRangeException("Large binary objects are not supported");
+			}
+
+			Int32 bitsValue = bits;
 
 			if (bitsValue == 0) //// trivial case
 			{
@@ -95,7 +196,7 @@ namespace SqlToolset
 			return result;
 		}
 
-		internal static Byte[] ShiftBitsRight(Byte[] input, Byte bits)
+		internal static Byte[] ShiftBitsRight(Byte[] input, Int32 bits)
 		{
 			if (null == input)
 			{
@@ -112,7 +213,7 @@ namespace SqlToolset
 				throw new ArgumentOutOfRangeException("Large binary objects are not supported");
 			}
 
-			Byte bitsValue = bits;
+			Int32 bitsValue = bits;
 
 			if (bitsValue == 0) //// trivial case
 			{

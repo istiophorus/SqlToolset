@@ -90,5 +90,18 @@ namespace SqlToolset.Tests
 
 			SingleShiftBitsRightTest(new Byte[] { 0x08, 0x00 }, new Byte[] { 0x00, 0x01 }, 11);
 		}
+
+		[TestMethod]
+		public void TestRotateBitsLeftSampleBytes()
+		{
+			SingleRotateBitsLeftTest(new Byte[] { 0x12, 0x34 }, new Byte[] { 0x23, 0x41}, 4);
+		}
+
+		private static void SingleRotateBitsLeftTest(Byte[] input, Byte[] expected, Byte bits)
+		{
+			Byte[] res = BitsShifter.RotateBitsLeft(input, bits);
+
+			CollectionAssert.AreEqual(expected, res);
+		}
 	}
 }
